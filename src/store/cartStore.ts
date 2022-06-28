@@ -3,31 +3,27 @@ import {
     makeObservable,
     observable,
 } from "mobx";
+import ICartItem from "../interfaces/ICartItem";
 
 
 class cartStore {
-    cartItems = [];
+    cartItems: ICartItem[] = [];
 
     constructor() {
         makeObservable(this, {
             cartItems: observable,
             addItem: action,
             deleteItem: action,
-            totalItems: computed,
             totalItemsLength: computed
         });
         autorun(this.logStoreDetails);
-    }
-
-    get totalItems() {
-        return this.cartItems;
     }
 
     get totalItemsLength() {
         return this.cartItems.length;
     }
 
-    addItem(clickedItem) {
+    addItem(clickedItem: ICartItem) {
         const check = this.cartItems.find(item => item.id === clickedItem.id)
         if (check) {
             this.cartItems.map(item =>
@@ -38,7 +34,7 @@ class cartStore {
         } else this.cartItems.push({...clickedItem, amount: 1});
     }
 
-    deleteItem(id) {
+    deleteItem(id: number) {
         const itemIndex = this.cartItems.findIndex((item) => item.id === id);
         this.cartItems.map((item) => {
             if (item.id === id) {
